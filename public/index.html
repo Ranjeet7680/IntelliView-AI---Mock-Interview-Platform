@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Mock Interview Platform</title>
+    <!-- Use a modern, beautiful font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+    <!-- Include marked for markdown rendering if needed -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="glass-header">
+            <div class="logo">
+                <div class="logo-icon"></div>
+                <h1>IntelliView AI</h1>
+            </div>
+            <nav>
+                <button class="nav-btn active" id="nav-setup">New Session</button>
+                <button class="nav-btn" id="nav-dashboard">Dashboard</button>
+            </nav>
+        </header>
+
+        <main>
+            <!-- View 1: Setup Session -->
+            <section id="view-setup" class="view-section active">
+                <div class="hero-content">
+                    <h2 class="gradient-text">Master Your Next Interview</h2>
+                    <p>Experience realistic, adaptive mock interviews powered by advanced AI. Get instant feedback and improve your skills.</p>
+                </div>
+
+                <div class="setup-card glass-panel">
+                    <h3>Configure Your Interview</h3>
+                    <form id="setup-form">
+                        <div class="form-group">
+                            <label for="role-input">Target Role</label>
+                            <input type="text" id="role-input" placeholder="e.g. Senior Frontend Engineer" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="difficulty-select">Difficulty Level</label>
+                            <select id="difficulty-select">
+                                <option value="beginner">Beginner / Entry Level</option>
+                                <option value="intermediate" selected>Intermediate / Mid Level</option>
+                                <option value="advanced">Advanced / Senior</option>
+                            </select>
+                        </div>
+                        
+                        <button type="submit" class="primary-btn pulse-anim" id="start-btn">
+                            <span>Start Interview Session</span>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                        </button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- View 2: Active Interview -->
+            <section id="view-interview" class="view-section hidden">
+                <div class="interview-header">
+                    <div class="role-badge" id="current-role-badge">Software Engineer</div>
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="interview-progress" style="width: 20%"></div>
+                        </div>
+                        <span class="progress-text" id="question-counter">Question 1 of 5</span>
+                    </div>
+                </div>
+
+                <div class="question-card glass-panel highlight-border">
+                    <div class="ai-avatar">AI</div>
+                    <div class="question-content">
+                        <h3 id="current-question">Loading your first question...</h3>
+                    </div>
+                </div>
+
+                <div class="answer-section">
+                    <div class="controls-row">
+                        <label>Your Response</label>
+                        <button id="voice-btn" class="icon-btn tooltip" data-tooltip="Start Voice Recording">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+                        </button>
+                    </div>
+                    <textarea id="answer-input" placeholder="Type or speak your answer here..." rows="6"></textarea>
+                    
+                    <div class="action-row">
+                        <button class="secondary-btn" id="skip-btn">Skip Question</button>
+                        <button class="primary-btn" id="submit-answer-btn">Submit Answer</button>
+                    </div>
+                </div>
+
+                <!-- Live Feedback Panel (appears after submitting) -->
+                <div id="live-feedback-panel" class="feedback-panel glass-panel hidden slide-up">
+                    <div class="feedback-header">
+                        <h4>Instant Feedback</h4>
+                        <div class="score-circle" id="live-score">8/10</div>
+                    </div>
+                    <div class="feedback-body">
+                        <p id="live-feedback-text">Evaluating your response...</p>
+                        
+                        <div class="tags-container">
+                            <div class="strengths-list" id="live-strengths"></div>
+                            <div class="weaknesses-list" id="live-weaknesses"></div>
+                        </div>
+                        
+                        <div class="better-answer-box">
+                            <h5>Suggested Answer Structure</h5>
+                            <p id="live-better-answer"></p>
+                        </div>
+                    </div>
+                    <button class="primary-btn full-width mt-4" id="next-question-btn">Next Question</button>
+                </div>
+            </section>
+
+            <!-- View 3: Session Summary -->
+            <section id="view-summary" class="view-section hidden fade-in">
+                <div class="summary-header">
+                    <h2>Interview Complete</h2>
+                    <p>Here's how you performed for the <span id="summary-role" class="highlight-text">Software Engineer</span> role.</p>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card glass-panel">
+                        <div class="stat-value" id="final-score">0.0</div>
+                        <div class="stat-label">Average Score</div>
+                    </div>
+                    <div class="stat-card glass-panel">
+                        <div class="stat-value" id="questions-answered">0</div>
+                        <div class="stat-label">Questions Answered</div>
+                    </div>
+                </div>
+
+                <div class="detailed-review glass-panel mt-6">
+                    <h3>Detailed Breakdown</h3>
+                    <div id="qa-history-container" class="qa-accordion">
+                        <!-- QA items will be injected here -->
+                    </div>
+                </div>
+
+                <div class="action-row center mt-6">
+                    <button class="primary-btn" id="new-session-btn">Start New Session</button>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="overlay hidden">
+        <div class="spinner"></div>
+        <p id="loading-text">Connecting to AI engine...</p>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
